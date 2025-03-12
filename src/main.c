@@ -6,7 +6,7 @@
 /*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 18:06:51 by garside           #+#    #+#             */
-/*   Updated: 2025/03/11 18:21:35 by garside          ###   ########.fr       */
+/*   Updated: 2025/03/12 16:22:13 by garside          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void	exec_fork1( t_pipex *pipex)
 	dup2(pipex->pipe_fd[1], STDOUT_FILENO);
 	close_all(pipex);
 	execve(pipex->path, pipex->cmd, pipex->env);
-	free(pipex->path);
+	if (pipex->path != pipex->cmd[0])
+		free(pipex->path);
 	free_split(pipex->cmd);
 	free(pipex);
 	ft_putstr_fd("Error: execve fail\n", 2);
@@ -58,7 +59,8 @@ void	exec_fork2(t_pipex *pipex)
 	dup2(pipex->outfile, STDOUT_FILENO);
 	close_all(pipex);
 	execve(pipex->path, pipex->cmd, pipex->env);
-	free(pipex->path);
+	if (pipex->path != pipex->cmd[0])
+		free(pipex->path);
 	free_split(pipex->cmd);
 	free(pipex);
 	ft_putstr_fd("Error: execve fail\n", 2);

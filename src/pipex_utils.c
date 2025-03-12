@@ -6,7 +6,7 @@
 /*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 16:39:37 by garside           #+#    #+#             */
-/*   Updated: 2025/03/11 18:13:33 by garside          ###   ########.fr       */
+/*   Updated: 2025/03/12 16:42:11 by garside          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@ char	*create__check_path(t_pipex *pipex, char *cmd)
 	pipex->cmd = ft_split(cmd, ' ');
 	if (!pipex->cmd)
 		return (NULL);
+	if (pipex->cmd[0] == NULL)
+	{
+		free_split(pipex->cmd);
+		pipex->path = NULL;
+		return (NULL);
+	}
 	pipex->path = find_cmd_path(pipex->cmd[0], pipex->env);
 	if (!pipex->path)
 	{
@@ -88,16 +94,19 @@ char	*find_cmd_path(char *cmd, char **env)
 	char	**paths;
 	char	*cmd_path;
 
-	path_env = get_path_env(env);
-	if (!path_env)
-		return (ft_putstr_fd("Error: PATH not found\n", 2), NULL);
 	if (cmd[0] == '/')
 	{
 		if (access(cmd, X_OK) != -1)
 			return (cmd);
 		else
+		{
+			ft_putstr_fd("Error: command not found\n", 2);
 			return (NULL);
+		}
 	}
+	path_env = get_path_env(env);
+	if (!path_env)
+		return (ft_putstr_fd("Error: command not found\n", 2), NULL);
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);

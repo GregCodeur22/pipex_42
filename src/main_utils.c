@@ -6,7 +6,7 @@
 /*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:20:43 by garside           #+#    #+#             */
-/*   Updated: 2025/03/11 18:50:37 by garside          ###   ########.fr       */
+/*   Updated: 2025/03/12 16:11:50 by garside          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	pipex_fork(t_pipex *pipex, int pid)
 			exec_fork1(pipex);
 		if (pipex->cmd[0] != pipex->path)
 			free(pipex->path);
-		free_split(pipex->cmd);
+		if (pipex->cmd)
+			free_split(pipex->cmd);
 	}
 	if (pid == 2)
 	{
@@ -35,6 +36,7 @@ void	pipex_fork(t_pipex *pipex, int pid)
 			exec_fork2(pipex);
 		if (pipex->cmd[0] != pipex->path)
 			free(pipex->path);
-		free_split(pipex->cmd);
+		if (pipex->cmd)
+			free_split(pipex->cmd);
 	}
 }
