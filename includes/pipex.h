@@ -6,7 +6,7 @@
 /*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:22:43 by garside           #+#    #+#             */
-/*   Updated: 2025/03/11 18:26:47 by garside          ###   ########.fr       */
+/*   Updated: 2025/03/13 13:21:12 by garside          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ typedef struct s_pipex
 void	free_split(char **tab);
 char	*find_cmd_path(char *cmd, char **env);
 char	*create__check_path(t_pipex *pipex, char *cmd);
-void	pipex_fork(t_pipex *pipex, int pid);
+void	pipex_fork1(t_pipex *pipex, int pid);
+void	pipex_fork2(t_pipex *pipex, int pid);
 void	close_all(t_pipex *pipex);
 void	exec_fork1( t_pipex *pipex);
 void	exec_fork2(t_pipex *pipex);

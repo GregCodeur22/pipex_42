@@ -6,7 +6,7 @@
 /*   By: garside <garside@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 18:06:51 by garside           #+#    #+#             */
-/*   Updated: 2025/03/12 16:22:13 by garside          ###   ########.fr       */
+/*   Updated: 2025/03/13 13:19:26 by garside          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,10 @@ t_pipex	*init_struct(char **av, char **env)
 		exit(1);
 	pipex->infile = open(av[1], O_RDONLY, 0644);
 	if (pipex->infile == -1)
-		(ft_putstr_fd("fail to open infile\n", 2), free(pipex), exit(1));
+		(ft_putstr_fd("fail to open infile\n", 2));
 	pipex->outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex->outfile == -1)
-		(ft_putstr_fd("fail to open outfile\n", 2), close(pipex->infile),
-			free(pipex), exit(1));
+		(ft_putstr_fd("fail to open outfile\n", 2));
 	pipex->env = env;
 	return (pipex);
 }
@@ -35,8 +34,10 @@ void	close_all(t_pipex *pipex)
 {
 	close(pipex->pipe_fd[0]);
 	close(pipex->pipe_fd[1]);
-	close(pipex->infile);
-	close(pipex->outfile);
+	if (pipex->infile != -1)
+		close(pipex->infile);
+	if (pipex->outfile != -1)
+		close(pipex->outfile);
 }
 
 void	exec_fork1( t_pipex *pipex)
@@ -78,10 +79,10 @@ int	main(int ac, char **av, char **env)
 		(close(pipex->infile), close(pipex->outfile), free(pipex));
 	create__check_path(pipex, av[2]);
 	if (pipex->path)
-		pipex_fork(pipex, 1);
+		pipex_fork1(pipex, 1);
 	create__check_path(pipex, av[3]);
 	if (pipex->path)
-		pipex_fork(pipex, 2);
+		pipex_fork2(pipex, 2);
 	return (close_all(pipex), wait(NULL), wait(NULL),
 		free(pipex), 0);
 }
